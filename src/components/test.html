@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio | Konrad</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    body {
+        background: #ffffff;
+        color: #2d3b45;
+    }
+
+    /* NAVBAR */
+    nav {
+        width: 100%;
+        padding: 25px 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .logo {
+        font-size: 32px;
+        font-weight: 600;
+    }
+
+    .menu {
+        display: flex;
+        gap: 40px;
+        font-size: 18px;
+    }
+
+    .menu a {
+        text-decoration: none;
+        color: #2d3b45;
+        opacity: 0.8;
+        transition: 0.3s;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+        opacity: 1;
+        font-weight: 600;
+    }
+
+    .home-pill {
+        background: #2d3b45;
+        color: white !important;
+        padding: 10px 28px;
+        border-radius: 50px;
+    }
+
+    /* HERO SECTION */
+    .hero {
+        margin-top: 60px;
+        padding: 0 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .hero h1 {
+        font-size: 64px;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .hero p {
+        margin-top: 18px;
+        font-size: 22px;
+        width: 700px;
+        opacity: 0.85;
+    }
+
+    .location {
+        text-align: right;
+        font-size: 15px;
+        line-height: 1.8;
+        opacity: 0.7;
+        padding-top: 20px;
+    }
+
+    .learn-btn {
+        margin-top: 25px;
+        border: 2px solid #2d3b45;
+        padding: 14px 38px;
+        font-size: 20px;
+        border-radius: 40px;
+        background: transparent;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .learn-btn:hover {
+        background: #2d3b45;
+        color: white;
+    }
+
+    /* BANNER */
+    .banner {
+        margin: 80px auto 0;
+        width: 90%;
+        height: 480px;
+        background: #bfbfbf;
+        border-radius: 24px;
+        overflow: hidden;
+    }
+
+    .banner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* ABOUT SECTION */
+    .about-section {
+        margin: 100px auto;
+        padding: 0 60px;
+        width: 90%;
+        display: flex;
+        gap: 60px;
+        align-items: flex-start;
+    }
+
+    .about-text h2 {
+        font-size: 48px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .about-text p {
+        font-size: 20px;
+        line-height: 1.8;
+        opacity: 0.85;
+        margin-bottom: 20px;
+    }
+
+    .skills-box {
+        margin-top: 20px;
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .skill-pill {
+        padding: 10px 22px;
+        border: 1.5px solid #2d3b45;
+        border-radius: 40px;
+        font-size: 16px;
+        opacity: 0.9;
+    }
+    .process-grid {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+.card {
+    padding: 28px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+}
+
+.card h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 17px;
+    opacity: 0.75;
+    line-height: 1.6;
+}
+
+.tools-icons {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.tools-icons img {
+    width: 48px;
+    height: 48px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.tools-icons img:hover {
+    transform: scale(1.15);
+}
+
+.projects-section {
+    margin: 120px auto;
+    width: 90%;
+    padding: 0 60px;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 48px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.section-subtitle {
+    font-size: 20px;
+    opacity: 0.7;
+    margin-bottom: 50px;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
+}
+
+.project-card {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.13);
+}
+
+.project-card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.project-content {
+    padding: 22px;
+    text-align: left;
+}
+
+.project-content h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.project-content p {
+    font-size: 17px;
+    opacity: 0.8;
+    margin-bottom: 14px;
+    line-height: 1.6;
+}
+
+.tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.tags span {
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: #e8ecef;
+    font-size: 14px;
+}
+
+.view-btn {
+    border: 2px solid #2d3b45;
+    padding: 10px 26px;
+    background: transparent;
+    border-radius: 40px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.view-btn:hover {
+    background: #2d3b45;
+    color: white;
+}
+
+.contact-section {
+    margin: 120px auto;
+    width: 90%;
+    padding: 0 60px;
+}
+
+.contact-container {
+    margin-top: 60px;
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+.contact-info h3 {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    color: #2d3b45;
+}
+
+.social-icons img {
+    width: 28px;
+    margin-right: 14px;
+    opacity: 0.8;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.social-icons img:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+.contact-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 18px;
+    border-radius: 14px;
+    border: 1.5px solid #d2d6da;
+    font-size: 17px;
+    outline: none;
+    background: #ffffff;
+}
+
+.contact-form textarea {
+    height: 140px;
+    resize: none;
+}
+
+.send-btn {
+    margin-top: 10px;
+    padding: 16px 38px;
+    font-size: 18px;
+    border-radius: 40px;
+    border: 2px solid #2d3b45;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.3s;
+    width: fit-content;
+}
+
+.send-btn:hover {
+    background: #2d3b45;
+    color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .contact-container {
+        flex-direction: column;
+    }
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">Λ</div>
+    <div class="menu">
+        <a href="#" class="home-pill">Home</a>
+        <a href="#">About me</a>
+        <a href="#">Case studies</a>
+        <a href="#">Experiments</a>
+        <a href="#">Contact</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div>
+        <h1>Hi there! I’m ABIN RAJ.</h1>
+        <p>I’m a Product Designer with 10+ years of experience delivering
+        user-centric and scalable design solutions</p>
+
+        <button class="learn-btn">Learn more</button>
+    </div>
+
+    <div class="location">
+        CURRENT LOCATION: INDIA<br>
+        LOCAL TIME: 5:01 PM
+    </div>
+</section>
+
+<!-- BANNER -->
+<div class="banner">
+    <img src="https://via.placeholder.com/1200x600?text=Product+Design+Work+Preview" alt="">
+</div>
+
+<!-- ABOUT SECTION -->
+<!-- ABOUT SECTION -->
+<section class="about-section">
+    <div class="about-text">
+        <h2>About Me</h2>
+        <p>I’m passionate about creating intuitive and beautifully functional digital
+        experiences. Throughout my career, I have worked with global product teams
+        designing solutions in fintech, enterprise SaaS, and e-commerce domains.</p>
+
+        <p>My process blends design thinking, research-based decisions,
+        and attention to visual detail—ensuring that each product is purposeful and
+        meaningful for its users.</p>
+
+        <h3 style="margin-top:50px; font-size:28px; font-weight:600;">What I do.</h3>
+
+        <div class="skills-box">
+            <div class="skill-pill">Mobile App Design</div>
+            <div class="skill-pill">Web Design</div>
+            <div class="skill-pill">Wireframing</div>
+            <div class="skill-pill">Prototyping</div>
+            <div class="skill-pill">Graphics Design</div>
+            <div class="skill-pill">Product Design</div>
+            <div class="skill-pill">Icons</div>
+        </div>
+
+        <h3 style="margin-top:60px; font-size:28px; font-weight:600;">
+            My creative process and tools I use
+        </h3>
+
+        <div class="process-grid">
+            <div class="card">
+                <h4>Market Research</h4>
+                <p>For understanding project goals & user motivations to create a meaningful experience.</p>
+            </div>
+            <div class="card">
+                <h4>Roadmap</h4>
+                <p>Clear roadmap of design strategy aligned to product vision & user needs.</p>
+            </div>
+            <div class="card">
+                <h4>Wireframing</h4>
+                <p>Strategic layout planning using sketches and low-fidelity wireframes.</p>
+            </div>
+            <div class="card">
+                <h4>Prototyping</h4>
+                <p>Interactive prototype to visualize flows & finalize UX direction.</p>
+            </div>
+            <div class="card">
+                <h4>User Testing</h4>
+                <p>Testing and feedback collection to ensure real-world usability.</p>
+            </div>
+            <div class="card">
+                <h4>Design Completion</h4>
+                <p>High-fidelity visuals, interaction polish & developer-ready handoff.</p>
+            </div>
+        </div>
+
+        <h3 style="margin-top:60px; font-size:28px; font-weight:600;">Tools</h3>
+        <div class="tools-icons">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png" alt="Figma">
+            <img src="https://cdn-icons-png.flaticon.com/512/888/888874.png" alt="Photoshop">
+            <img src="https://cdn-icons-png.flaticon.com/512/888/888879.png" alt="Illustrator">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968672.png" alt="VSCode">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968292.png" alt="JS">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968242.png" alt="CSS">
+        </div>
+    </div>
+</section>
+<!-- PROJECTS SECTION -->
+<section class="projects-section">
+    <h2 class="section-title">Projects & Case Studies</h2>
+    <p class="section-subtitle">A selection of my recent design and product work.</p>
+
+    <div class="project-grid">
+
+        <!-- Project Card 1 -->
+        <div class="project-card">
+            <img src="https://via.placeholder.com/600x380?text=Project+Preview" alt="project preview">
+            <div class="project-content">
+                <h3>Fintech Mobile App</h3>
+                <p>A modern cross-platform money transfer experience designed for global users.</p>
+
+                <div class="tags">
+                    <span>UX Design</span>
+                    <span>Fintech</span>
+                    <span>Mobile</span>
+                </div>
+
+                <button class="view-btn">View Case Study</button>
+            </div>
+        </div>
+
+        <!-- Project Card 2 -->
+        <div class="project-card">
+            <img src="https://via.placeholder.com/600x380?text=Project+Preview" alt="project preview">
+            <div class="project-content">
+                <h3>E-commerce Dashboard</h3>
+                <p>Designing an analytics dashboard for merchants to track performance and revenue.</p>
+                <div class="tags">
+                    <span>UI Design</span>
+                    <span>Dashboard</span>
+                </div>
+
+                <button class="view-btn">View Case Study</button>
+            </div>
+        </div>
+
+        <!-- Project Card 3 -->
+        <div class="project-card">
+            <img src="https://via.placeholder.com/600x380?text=Project+Preview" alt="project preview">
+            <div class="project-content">
+                <h3>Social Community App</h3>
+                <p>A platform enabling people to connect, chat and share experiences in groups.</p>
+                <div class="tags">
+                    <span>Product Design</span>
+                    <span>Social</span>
+                </div>
+
+                <button class="view-btn">View Case Study</button>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- CONTACT SECTION -->
+<section class="contact-section" id="contact">
+    <h2 class="section-title">Let’s Connect</h2>
+    <p class="section-subtitle">Open to new ideas, good conversations, and exciting collaborations.</p>
+
+    <div class="contact-container">
+
+        <!-- Left Content -->
+        <div class="contact-info">
+            <h3>Got a project in your mind?<br>Let’s talk.</h3>
+
+            <div class="social-icons">
+                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Instagram"></a>
+                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Dribbble"></a>
+                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="LinkedIn"></a>
+                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub"></a>
+            </div>
+        </div>
+
+        <!-- Right Form -->
+        <form class="contact-form">
+            <input type="text" placeholder="Full Name" required>
+            <input type="email" placeholder="Email" required>
+            <input type="text" placeholder="Contact">
+            <textarea placeholder="Message"></textarea>
+            <button type="submit" class="send-btn">Send Message</button>
+        </form>
+    </div>
+</section>
+
+
+
+
+</body>
+</html>
