@@ -1,36 +1,43 @@
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-// import Flip from "gsap/Flip";
+import { gsap } from "gsap";
+import Flip from "gsap/dist/Flip";
 import Lenis from "@studio-freight/lenis";
 import "./AnimatedGrid.css";
 
-// gsap.registerPlugin(Flip);
+gsap.registerPlugin(Flip);
 
+// TEMP DATA (replace with logos later)
+const ROWS = [
+  Array(7).fill(0),
+  Array(7).fill(0),
+  Array(7).fill(0),
+  Array(7).fill(0),
+  Array(7).fill(0),
+]
 const AnimatedGrid = () => {
-  const bodyRef = useRef<HTMLBodyElement | null>(null);
-  const gridRef = useRef<HTMLDivElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-  const enterRef = useRef<HTMLDivElement | null>(null);
-  const fullviewRef = useRef<HTMLDivElement | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const enterRef = useRef<HTMLDivElement>(null);
+  const fullviewRef = useRef<HTMLDivElement>(null);
+  console.log("from aniamtonsssss ")
 
   useEffect(() => {
-    const body = document.body;
-    const grid = gridRef.current!;
-    const content = contentRef.current!;
-    const enterButton = enterRef.current!;
-    const fullview = fullviewRef.current!;
+    const grid = gridRef.current;
+    const content = contentRef.current;
+    const enterButton = enterRef.current;
+    const fullview = fullviewRef.current;
+
+    if (!grid || !content || !enterButton || !fullview) return;
+
     const gridRows = grid.querySelectorAll<HTMLDivElement>(".row");
+    if (!gridRows.length) return;
 
     let winsize = { width: window.innerWidth, height: window.innerHeight };
     let mousepos = { x: winsize.width / 2, y: winsize.height / 2 };
 
-    const config = {
-      translateX: true,
-      skewX: false,
-      contrast: true,
-      scale: false,
-      brightness: true
-    };
+    window.addEventListener("resize", () => {
+      winsize = { width: window.innerWidth, height: window.innerHeight };
+    });
 
     const numRows = gridRows.length;
     const middleRowIndex = Math.floor(numRows / 2);
@@ -38,95 +45,70 @@ const AnimatedGrid = () => {
     const middleRowItems = middleRow.querySelectorAll(".row__item");
     const middleRowItemIndex = Math.floor(middleRowItems.length / 2);
 
-    const middleRowItemInner = middleRowItems[
-      middleRowItemIndex
-    ].querySelector<HTMLDivElement>(".row__item-inner")!;
+    const middleRowItemInner =
+      middleRowItems[middleRowItemIndex].querySelector<HTMLDivElement>(
+        ".row__item-inner"
+      )!;
 
     const middleRowItemInnerImage =
       middleRowItemInner.querySelector<HTMLDivElement>(".row__item-img")!;
 
     middleRowItemInnerImage.classList.add("row__item-img--large");
 
-    const baseAmt = 0.1;
-    const minAmt = 0.05;
-    const maxAmt = 0.1;
-
     const renderedStyles = Array.from({ length: numRows }, (_, index) => {
-      const distance = Math.abs(index - middleRowIndex);
-      const amt = Math.max(baseAmt - distance * 0.03, minAmt);
-      const scaleAmt = Math.min(baseAmt + distance * 0.03, maxAmt);
-
+      const dist = Math.abs(index - middleRowIndex);
       return {
-        amt,
-        scaleAmt,
-        translateX: { previous: 0, current: 0 },
-        contrast: { previous: 100, current: 100 },
-        brightness: { previous: 100, current: 100 }
+        amt: Math.max(0.1 - dist * 0.03, 0.05),
+        x: { prev: 0, curr: 0 },
+        contrast: { prev: 100, curr: 100 },
+        brightness: { prev: 100, curr: 100 },
       };
     });
 
     const lerp = (a: number, b: number, n: number) => (1 - n) * a + n * b;
-
-    const getMousePos = (e: MouseEvent | Touch) => ({
-      x: "pageX" in e ? e.pageX : (e as Touch).clientX,
-      y: "pageY" in e ? e.pageY : (e as Touch).clientY
-    });
-
-    const updateMouse = (e: MouseEvent | Touch) => {
-      const pos = getMousePos(e);
-      mousepos.x = pos.x;
-      mousepos.y = pos.y;
-    };
 
     const mapX = () =>
       (((mousepos.x / winsize.width) * 2 - 1) * 40 * winsize.width) / 100;
 
     const mapContrast = () => {
       const t = Math.abs((mousepos.x / winsize.width) * 2 - 1);
-      return 100 - Math.pow(t, 2) * (100 - 330);
+      return 100 - t * t * (100 - 330);
     };
 
     const mapBrightness = () => {
       const t = Math.abs((mousepos.x / winsize.width) * 2 - 1);
-      return 100 - Math.pow(t, 2) * (100 - 15);
+      return 100 - t * t * (100 - 15);
     };
 
+    const onMouseMove = (e: MouseEvent) => {
+      mousepos.x = e.clientX;
+      mousepos.y = e.clientY;
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+
     let rafId: number;
-
     const render = () => {
-      gridRows.forEach((row, index) => {
-        const style = renderedStyles[index];
+      gridRows.forEach((row, i) => {
+        const s = renderedStyles[i];
+        s.x.curr = mapX();
+        s.contrast.curr = mapContrast();
+        s.brightness.curr = mapBrightness();
 
-        style.translateX.current = mapX();
-        style.contrast.current = mapContrast();
-        style.brightness.current = mapBrightness();
-
-        style.translateX.previous = lerp(
-          style.translateX.previous,
-          style.translateX.current,
-          style.amt
-        );
-
-        style.contrast.previous = lerp(
-          style.contrast.previous,
-          style.contrast.current,
-          style.amt
-        );
-
-        style.brightness.previous = lerp(
-          style.brightness.previous,
-          style.brightness.current,
-          style.amt
-        );
+        s.x.prev = lerp(s.x.prev, s.x.curr, s.amt);
+        s.contrast.prev = lerp(s.contrast.prev, s.contrast.curr, s.amt);
+        s.brightness.prev = lerp(s.brightness.prev, s.brightness.curr, s.amt);
 
         gsap.set(row, {
-          x: style.translateX.previous,
-          filter: `contrast(${style.contrast.previous}%) brightness(${style.brightness.previous}%)`
+          x: s.x.prev,
+          filter: `contrast(${s.contrast.prev}%) brightness(${s.brightness.prev}%)`,
         });
       });
 
       rafId = requestAnimationFrame(render);
     };
+
+    render();
 
     const enterFullview = () => {
       const flipstate = Flip.getState(middleRowItemInner);
@@ -139,7 +121,7 @@ const AnimatedGrid = () => {
             duration: 0.9,
             ease: "power4",
             absolute: true,
-            onComplete: () => cancelAnimationFrame(rafId)
+            onComplete: () => cancelAnimationFrame(rafId),
           })
         )
         .to(grid, { opacity: 0.01, duration: 0.9 }, 0)
@@ -147,42 +129,65 @@ const AnimatedGrid = () => {
         .to(content, { y: "var(--trans-content)", duration: 0.9 });
 
       enterButton.classList.add("hidden");
-      body.classList.remove("noscroll");
+      document.body.classList.remove("noscroll");
     };
+
+    enterButton.addEventListener("click", enterFullview);
 
     const lenis = new Lenis({ lerp: 0.15 });
     gsap.ticker.add((t) => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
 
-    window.addEventListener("mousemove", updateMouse);
-    window.addEventListener("touchmove", (e) => updateMouse(e.touches[0]));
-    enterButton.addEventListener("click", enterFullview);
-
-    render();
-
     return () => {
-      window.removeEventListener("mousemove", updateMouse);
-      window.removeEventListener("touchmove", () => {});
-      enterButton.removeEventListener("click", enterFullview);
       cancelAnimationFrame(rafId);
+      window.removeEventListener("mousemove", onMouseMove);
+      enterButton.removeEventListener("click", enterFullview);
     };
   }, []);
+
+  const IMAGES = [
+  "https://cdn.simpleicons.org/react/61DAFB",
+  "https://cdn.simpleicons.org/node.js/339933",
+  "https://cdn.simpleicons.org/typescript/3178C6",
+  "https://cdn.simpleicons.org/mongodb/47A248",
+  "https://cdn.simpleicons.org/docker/2496ED",
+  "https://cdn.simpleicons.org/amazonaws/FF9900",
+  "https://cdn.simpleicons.org/redis/DC382D",
+];
+
 
   return (
     <main>
       <section className="intro">
-        <div className="grid" ref={gridRef}>
-          {/* KEEP YOUR ROW STRUCTURE HERE */}
+      <div className="grid" ref={gridRef}>
+  {ROWS.map((row, rowIndex) => (
+    <div className="row" key={rowIndex}>
+      {row.map((_, itemIndex) => (
+        <div className="row__item" key={itemIndex}>
+          <div className="row__item-inner">
+            <div
+              className="row__item-img"
+              style={{
+                backgroundImage: `url(${IMAGES[itemIndex % IMAGES.length]})`,
+              }}
+            />
+          </div>
         </div>
+      ))}
+    </div>
+  ))}
+</div>
+
 
         <div className="fullview" ref={fullviewRef}></div>
+
         <div className="enter" ref={enterRef}>
           <span>Explore</span>
         </div>
       </section>
 
       <section className="content" ref={contentRef}>
-        {/* your content */}
+        {/* your existing content */}
       </section>
     </main>
   );

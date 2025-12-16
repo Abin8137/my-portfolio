@@ -5,7 +5,7 @@ import About from "./components/About";
 import Tools from "./components/Tools";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
-
+import AnimatedGrid from "./components/animated-grid/AnimateGrid";
 const App: React.FC = () => {
   const homeRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
@@ -20,7 +20,7 @@ const App: React.FC = () => {
       <section ref={homeRef} className="min-h-screen pt-20">
         <Hero />
       </section>
-
+       <AnimatedGrid />
       <section ref={aboutRef} className="min-h-screen pt-20">
         <About />
       </section>
